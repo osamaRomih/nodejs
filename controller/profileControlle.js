@@ -1,14 +1,7 @@
-import dotenv from "dotenv";
-dotenv.config();
-import register from "../model/register.js";
-import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
-import { successResponse, errorResponse } from "../response/response.js";
-
-const login = async (req, res) => {
-  const { email, password, userName, role } = req.body;
+const profile = async (req, res) => {
+  const id= req.params.id;
   try {
-    const verifyEmail = await register.findOne({ email });
+    const verifyEmail = await register.findby({ email });
     if (!verifyEmail) {
       errorResponse(res, "Invalid Email Or Password ", 400);
       return;
@@ -35,5 +28,3 @@ const login = async (req, res) => {
     errorResponse(res, error.message, 500);
   }
 };
-
-export default login;
