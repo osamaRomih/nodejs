@@ -4,23 +4,24 @@ import jwt from "jsonwebtoken";
 
 const auth = (req, res, next) => {
   try {
-    console.log("token".req);
-    const auth = req.headers.authorization?.splite(" ")[1];
-    if (!auth) {
+    const auth = req.headers.authorization;
+
+    if (!auth || !auth.startsWith("Bearer ")) {
       res.status(201).json({ message: "No Authorized" });
       return;
     }
+    const token = auth?.split(" ")[1];
+    console.log("token", token);
 
-    const decode = jwt.verify(auth, process.env.JWT_SECRET);
+    const decode = jwt.verify(token, process.env.JWT_SECRET);
     if (!decode) {
-      res.status(403).json("Invalid Token");
+      res.status(403).json("Invalid or expired token");
       return;
     }
 
-    if (auth & decode) {
-      req.user = decode;
-      next();
-    }
+    req.user = decode;
+    console.log(req.user);
+    next();
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

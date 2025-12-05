@@ -9,6 +9,7 @@ import mongoose from "mongoose";
 //Internal modules
 import userRouter from "./router/userRouter.js";
 import signUp from "./router/registerRouter.js";
+import prifile from "./router/profileRouter.js";
 const port = process.env.PORT || 3000;
 
 //  Initialize app
@@ -25,6 +26,7 @@ DB.catch((err) => console.log("❌Erorr Connect DB", err));
 // Routes
 app.use("/api/user", userRouter);
 app.use("/api/auth", signUp);
+app.use("/api/admin", prifile);
 
 // Listen
 app.listen(port, () => console.log("🚀 Listen From http://localhost:" + port));

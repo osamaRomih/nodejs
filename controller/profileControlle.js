@@ -1,30 +1,21 @@
-const profile = async (req, res) => {
-  const id= req.params.id;
+import User from "../model/register.js";
+import { successResponse, errorResponse } from "../response/response.js";
+
+const profileController = async (req, res) => {
   try {
-    const verifyEmail = await register.findby({ email });
-    if (!verifyEmail) {
-      errorResponse(res, "Invalid Email Or Password ", 400);
+    console.log("req", req.user.id);
+    const profileUser = await User.findById(req.user.id).select(
+      "-password -__v"
+    );
+    console.log("profileUser", profileUser);
+    if (!profileUser) {
+      errorResponse(res, "User Not Found", 404);
       return;
     }
-
-    const verifyPassword = await bcrypt.compare(password, verifyEmail.password);
-    if (!verifyPassword) {
-      errorResponse(res, "Invalid Email Or Password ", 400);
-      return;
-    }
-
-    if (verifyEmail && verifyPassword) {
-      const token = jwt.sign(
-        { id: verifyEmail._id, role: verifyEmail.role },
-        process.env.JWT_SECRET,
-        { expiresIn: process.env.JWT_EXPIRE }
-      );
-      if (verifyEmail && verifyPassword && token) {
-        console.log(verifyEmail);
-        successResponse(res, "Login Successfully", 200, token);
-      }
-    }
+    successResponse(res, "Access User", 200, profileUser);
   } catch (error) {
     errorResponse(res, error.message, 500);
   }
 };
+
+export default profileController;

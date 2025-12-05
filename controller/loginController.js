@@ -27,7 +27,7 @@ const login = async (req, res) => {
         { expiresIn: process.env.JWT_EXPIRE }
       );
       if (verifyEmail && verifyPassword && token) {
-        console.log(verifyEmail);
+        console.log("verifyEmail", verifyEmail);
         successResponse(res, "Login Successfully", 200, token);
       }
     }
